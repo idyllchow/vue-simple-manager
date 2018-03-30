@@ -5,6 +5,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './vuex/store'
 import Vuex from 'vuex'
+import Mock from './mock'
+Mock.bootstrap();
 
 Vue.use(ElementUI)
 Vue.use(Vuex)

@@ -12,11 +12,13 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.0.3",
+    "mockjs": "^1.0.1-beta3",
     "vue": "^2.3.3",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.14.1",
     "babel-core": "^6.0.0",
     "babel-loader": "^7.0.0",
     "babel-preset-env": "^1.6.1",
