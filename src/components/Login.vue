@@ -62,8 +62,9 @@
                   type: 'error'
                 });
               } else {
+                console.log("=======requestLogin======user: " + JSON.stringify(user));
                 sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/' });
+                this.$router.push({ path: '/auto_config' });
               }
             });
           } else {

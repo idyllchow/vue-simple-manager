@@ -6,6 +6,7 @@
 import Main from './components/Main.vue'
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
+import AutoConfig from './components/AutoConfig.vue'
 import NotFound from './components/404.vue'
 import Deploy from './components/Deploy.vue'
 import About from './components/About.vue'
@@ -25,7 +26,7 @@ const routers = new VueRouter({
 		path: '/',
 		component: Home,
 		children: [
-		{ path: 'home', component: Home },
+		{ path: 'auto_config', component: AutoConfig },
         { path: 'deploy', component: Deploy },
         { path: 'about', component: About},
         ]

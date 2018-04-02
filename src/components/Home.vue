@@ -1,52 +1,93 @@
 <template>
+  <div>
   <el-row class="container">
     <el-col :span="24" class="header">
-      <a class="logo" href="/">
+      <a class="logo" href="/" style="font-size:21px font-weight: bold">
         <img src="../assets/seedland-32.png">
       <span>应用发布平台</span>
       </a>
-      <a class="userinfo">
-        <img src="../assets/img_head.png">
-        <span>管理员</span>
-      </a>
+      <el-col :span="3"  class="userinfo">
+        <el-dropdown trigger="hover">
+          <span class="el-dropdown-link userinfo-inner"><img :src="this.userAvatar"/> {{userName}} </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-col>
     </el-col>
-    <!-- <slot></slot> -->
-    <div class="tab">
-      <router-link to="/"> <button class="tablinks" >主页</button></router-link>
-      <router-link to="/deploy"> <button class="tablinks" >应用发布</button></router-link>
-      <router-link to="/about"> <button class="tablinks" >关于</button></router-link>
-    </div>
-    <!-- Tab content -->
-    <!-- <div id="London" class="tabcontent">
-      <h3>London</h3>
-      <p>London is the capital city of England.</p>
-    </div>
-
-    <div id="Paris" class="tabcontent">
-      <h3>Paris</h3>
-      <p>Paris is the capital of France.</p>
-    </div>
-
-    <div id="Tokyo" class="tabcontent">
-      <h3>Tokyo</h3>
-      <p>Tokyo is the capital of Japan.</p>
-    </div> -->
-    <router-view></router-view>
+      
+    <!-- <router-view></router-view> -->
 
   </el-row>
+
+  <div style="margin-top:55px" >
+    <el-tabs v-model="activeName" type="border-card" >
+      <el-tab-pane label="应用配置" name="first">
+        <AutoConfig/>
+      </el-tab-pane>
+      <el-tab-pane label="应用发布" name="second">
+        <Deploy/>
+      </el-tab-pane>
+      <el-tab-pane label="关于" name="third">   
+        <About/>   
+      </el-tab-pane>
+    </el-tabs>
+    </div>
+
+  </div>
 </template>
 
 <script>
-  // import VLink from '../components/VLink.vue'
+  import AutoConfig from './AutoConfig.vue'
+  import Deploy from './Deploy.vue'
+  import About from './About.vue'
 
-  // export default {
-  //   components: {
-  //     VLink
-  //   }
-  // }
+  export default {
+    components: {
+      AutoConfig,
+      Deploy,
+      About
+    },
+    data() {
+      return {
+        sysName: '应用发布平台',
+        collapsed: false,
+        userName: '',
+        userAvatar: '',
+        activeName: 'second',
+        form: {
+
+        }
+      }
+    },
+    methods: {
+      logout: function () {
+        var _this = this;
+        this.$confirm('确认退出吗？', '提示', {
+
+        }).then(() => {
+          sessionStorage.removeItem('user');
+          _this.$router.push('/login');
+        }).catch(() => {
+
+        });
+      }
+    },
+    mounted() {
+      var user = sessionStorage.getItem('user');
+      console.log(user);
+      if (user) {
+        console.log("========user info======" + user)
+        user = JSON.parse(user);
+        this.userName = user.name || '';
+        this.userAvatar = user.avatar || '';
+      }
+    }
+  }
 </script> 
 
-<style>
+<style >
+
 body {
     margin: 0px;
     padding: 0px;
@@ -104,13 +145,24 @@ body {
   font-weight: 200;
   float: right;
   text-decoration: none;
+  .userinfo-inner {
+          cursor: pointer;
+          color:#fff;
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            margin: 10px 0px 10px 10px;
+            float: right;
+          }
+  }
 }
 .userinfo img{
   vertical-align: middle;
-  margin-top: -8px;
-  margin-right: 6px;
-  width: 35px;
-  height: 35px;
+  margin: 10px 0px 10px 10px;
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
 }
 #wapper {
   position: relative;

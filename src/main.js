@@ -5,24 +5,24 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './vuex/store'
 import Vuex from 'vuex'
-import Mock from './mock'
+import Mock from './mock/mock'
 Mock.bootstrap();
 
 Vue.use(ElementUI)
 Vue.use(Vuex)
 
 router.beforeEach((to, from, next) => {
-  // if (to.path == '/login') {
-  //   sessionStorage.removeItem('user');
-  // }
-  // let user = JSON.parse(sessionStorage.getItem('user'));
-  // if (!user && to.path != '/login') {
-  //   next({ path: '/login' })
-  // } else {
-  //   next()
-  // }
+  if (to.path == '/login') {
+    sessionStorage.removeItem('user');
+  }
+  let user = JSON.parse(sessionStorage.getItem('user'));
+  if (!user && to.path != '/login') {
+    next({ path: '/login' })
+  } else {
+    next()
+  }
 
-  next()
+  // next()
 
 })
 

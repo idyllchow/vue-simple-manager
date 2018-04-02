@@ -1,39 +1,11 @@
 <template>
-  <!-- <el-row class="container">
-    <el-col :span="24" class="header">
-      <a class="logo" href="/">
-        <img src="../assets/seedland-32.png">
-      <span>应用发布平台</span>
-      </a>
-      <a class="userinfo">
-        <img src="../assets/img_head.png">
-        <span>管理员</span>
-      </a>
-    </el-col>
-    <div class="tab">
-      <router-link to="/"> <button class="tablinks" >Home</button></router-link>
-      <router-link to="/deploy"> <button class="tablinks" >Deploy</button></router-link>
-      <router-link to="/about"> <button class="tablinks" >About</button></router-link>
-    </div>
-    <router-view></router-view>
-
-  </el-row> -->
-  <div>
-    <transition name="fade"
+  <transition name="fade"
     mode="out-in">
     <router-view></router-view>
     </transition>
-  </div>
 </template>
 
 <script>
-  // import VLink from '../components/VLink.vue'
-
-  // export default {
-  //   components: {
-  //     VLink
-  //   }
-  // }
   export default {
     name: 'app',
     components: {
