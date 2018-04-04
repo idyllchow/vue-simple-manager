@@ -25,11 +25,11 @@ const routers = new VueRouter({
 	{
 		path: '/',
 		component: Home,
-		children: [
-		{ path: 'auto_config', component: AutoConfig },
-        { path: 'deploy', component: Deploy },
-        { path: 'about', component: About},
-        ]
+		// children: [
+		// { path: '', component: AutoConfig },
+  //       { path: 'deploy', component: Deploy },
+  //       { path: 'about', component: About},
+  //       ]
 	}, 
 	{
 		path: '/404',

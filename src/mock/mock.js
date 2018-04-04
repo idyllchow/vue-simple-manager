@@ -1,9 +1,10 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { LoginUsers, Users } from './user';
+import { HistoryDeploys } from './historyDeploy';
 
 let _Users = Users;
-
+let _HistoryDeploys = HistoryDeploys;
 
 export default {
   /**
@@ -47,7 +48,6 @@ export default {
 
     mock.onPost('/deploy').reply(config => {
       JSON.parse(config.data);
-      console.log("=======deploy params========" + config.data);
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {code:200, msg: '发布成功'}]);
@@ -56,18 +56,21 @@ export default {
     });
 
     //获取info列表
-    mock.onGet('/info/list').reply(config => {
-      console.dir(config.params);
-      let {name} = config.params;
-      let mockInfos = _Infos.filter(info => {
-        if(name&&info.name.indexOf(name) == -1)
-          return false;
+    mock.onGet('/historyDeploy').reply(config => {
+      let {page} = config.params;
+      
+      let mockHistoryDeploys = _HistoryDeploys.filter(historyDeploy => {
+        
         return true;
-      })
+      });
+      let total = mockHistoryDeploys.length;
+      mockHistoryDeploys = mockHistoryDeploys.filter((u, index) => index < 7 * page && index >= 7 * (page - 1));
+      console.log("========_HistoryDeploys===========page: " + page + "====total====" + total);
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200,{
-            infos: mockInfos
+            total: total,
+            historyDeploys: mockHistoryDeploys
           }]);
         },1000);
       })

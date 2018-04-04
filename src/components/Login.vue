@@ -64,7 +64,7 @@
               } else {
                 console.log("=======requestLogin======user: " + JSON.stringify(user));
                 sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/auto_config' });
+                this.$router.push({ path: '/' });
               }
             });
           } else {

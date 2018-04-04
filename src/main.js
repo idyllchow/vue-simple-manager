@@ -7,8 +7,12 @@ import store from './vuex/store'
 import Vuex from 'vuex'
 import Mock from './mock/mock'
 Mock.bootstrap();
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+
 
 Vue.use(ElementUI)
+Vue.use(MintUI)
 Vue.use(Vuex)
 
 router.beforeEach((to, from, next) => {
