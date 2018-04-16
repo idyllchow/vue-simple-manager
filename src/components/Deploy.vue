@@ -5,27 +5,26 @@
       <div class="deploy-title">添加上线版本</div>
       <div style="height:1px;margin:0px auto;padding:0px;overflow:hidden; background-color:grey"></div>
 
-      <el-form ref="deployForm" :model="deployForm" label-width="80px" :rules="deployFormRules" style="margin:20px;width:60%;min-width:600px;">
+      <el-form ref="versionInfoForm" :model="versionInfoForm" label-width="80px" :rules="versionInfoFormRules" style="margin:20px;width:60%;min-width:600px;">
         <el-form-item label="应用名称" prop="appName">
-          <el-select v-model="deployForm.appName" placeholder="请选择发布应用">
+          <el-select v-model="versionInfoForm.appName" placeholder="请选择发布应用">
             <el-option label="实地通" value="sloa"></el-option>
             <el-option label="应用2" value="sltoken"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="系统平台" prop="platform">
-          <el-select v-model="deployForm.platform" placeholder="请选择发布平台">
+        <el-form-item label="系统平台" prop="osType">
+          <el-select v-model="versionInfoForm.osType" placeholder="请选择发布平台">
             <el-option label="Android" value="Android"></el-option>
             <el-option label="iOS" value="iOS"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="版本号" prop="version">
-          <el-input v-model="deployForm.version" name="version" placeholder="请输入发布版本号"></el-input>
+          <el-input v-model="versionInfoForm.version" name="version" placeholder="请输入发布版本号"></el-input>
         </el-form-item>
         <el-form-item label="强制更新">
-          <el-switch on-text="" off-text="" v-model="deployForm.upgradeType"></el-switch>
+          <el-switch on-text="" off-text="" v-model="versionInfoForm.upgradeType"></el-switch>
         </el-form-item>
         <el-form-item label="A/B用户">
-          <!-- <el-autocomplete v-model="deployForm.targetUser" name="oauser" :fetch-suggestions="querySearchAsync"  @select="handleSelect" placeholder="请输入灰度用户名"></el-autocomplete> -->
           <el-tag
             :key="tag"
             v-for="tag in dynamicTags"
@@ -34,25 +33,45 @@
             @close="handleClose(tag)">
             {{tag}}
           </el-tag>
-          <el-input
+          <el-autocomplete
             class="input-new-tag"
+            :fetch-suggestions="querySearch"
             v-if="inputVisible"
             v-model="inputValue"
+            placeholder="用户名"
+            :trigger-on-focus="false"
             ref="saveTagInput"
             size="small"
+            @select="handleSelect"
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm"
             >
-          </el-input>
+          </el-autocomplete>
+
           <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 灰度用户</el-button>
         </el-form-item>
+        <!-- <el-form-item>
+          <el-autocomplete class="inline-input" :fetch-suggestions="querySearch" placeholder="Please Input" :trigger-on-focus="false" @select="handleSelect"></el-autocomplete>
+        </el-form-item> -->
+        <!-- <el-form-item label="上传应用">
+          <el-upload
+              :action="uploadActionUrl"
+              :file-list="files"
+              :limit="1"    
+              :on-error="uploadError"
+              :on-success="uploadSuccess"
+              :on-remove="onRemoveTxt"
+              :before-upload="onBeforeUpload">
+              <el-button size="small" type="primary">点击上传</el-button>
+
+          </el-upload>
+        </el-form-item> -->
         <el-form-item label="更新提示">
-          <el-input type="textarea" :rows=5 v-model="deployForm.changelog" ></el-input>
+          <el-input type="textarea" :rows=5 v-model="versionInfoForm.changeLog" ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onDeploy">立即发布</el-button>
         </el-form-item>
-
       </el-form>
     </div>
 
@@ -63,20 +82,20 @@
           </el-table-column>
           <el-table-column prop="appName" label="应用名称" width="120" sortable>
           </el-table-column>
-          <el-table-column prop="platform" label="系统平台" width="120" sortable>
+          <el-table-column prop="osType" label="系统平台" width="120" sortable>
           </el-table-column>
           <el-table-column prop="version" label="版本号" width="120"></el-table-column>
-          <el-table-column prop="upgradeType" label="更新类型"  width="120"> <!-- :formatter="formatPlatform" -->
+          <el-table-column prop="upgradeType" label="更新类型"  :formatter="formatUpgradeType" width="120"> <!-- :formatter="formatPlatform" -->
           </el-table-column>
-          <el-table-column prop="dateTime" label="添加时间" width="180" sortable>
+          <el-table-column prop="createTime" label="添加时间" width="180" sortable>
           </el-table-column>
-          <el-table-column prop="changelog" label="更新日志" min-width="100" >
+          <el-table-column prop="changeLog" label="更新日志" min-width="100" >
           </el-table-column>
       </el-table>
     </div>
 
     <el-col :span="24" class="toolbar">
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="7" :total="total" style="float:right;">
+      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :totalPages="totalPages" style="float:right;">
       </el-pagination>
     </el-col>
   </div>
@@ -86,7 +105,8 @@
 
 <script>
   import MainLayout from '../components/Main.vue'
-  import { getHistoryDeploy, queryHr, deploy } from '../api/api'
+  import { getHistoryDeploy, deploy } from '../api/api'
+  import { allHumanResource, checkData } from '../api/humanResource'
 
   export default {
     components: {
@@ -94,26 +114,29 @@
     },
     data() {
       return {
-          deployFormRules: {
+          versionInfoFormRules: {
               appName: [
                 { required: true, message: '请选择应用名称', trigger: 'blur'}
               ],
-              platform: [
+              osType: [
                 { required: true, message: '请选择系统平台', trigger: 'blur'}
               ],
               version: [
                 { required: true, message: '请输入发布版本号', trigger: 'blur'}
               ]
           },
-          total: 0,
+          totalPages: 0,
+          pageSize: 7,
           page: 1,
-          deployForm: {
+          uploadActionUrl: 'uploadApp',
+          files: [],
+          versionInfoForm: {
             appName: '',
-            platform: '',
+            osType: '',
             version: '',
-            upgradeType: false,
-            targetUser:'',
-            changelog:'',
+            upgradeType: '3',
+            grayscale:'',
+            changeLog:''
         },
           loading: false,
           historyDeploys: [],
@@ -124,20 +147,35 @@
     },
     methods: {
       //更新类型转换
-      formatPlatform: function(row, column) {
-        return row.platform == 1 ? '强制更新' : '非强制更新';
+      formatUpgradeType: function(row, column) {
+        return row.upgradeType == 3 ? '强制更新' : '非强制更新';
       },
       handleCurrentChange(val) {
         this.page = val;
         this.getHistory();
+      },
+      onBeforeUpload(file)
+      {
+        const isIMAGE = file.type === 'image/jpeg'||'image/gif'||'image/png';
+        const isLt1M = file.size / 1024 / 1024 < 100;
+
+        if (!isIMAGE) {
+          this.$message.error('上传文件只能是图片格式!');
+        }
+        if (!isLt1M) {
+          this.$message.error('上传文件大小不能超过 100MB!');
+        }
+        return isIMAGE && isLt1M;
       },
       getHistory() {
         let para = {
           page: this.page
         };
         getHistoryDeploy(para).then((res) => {
-          this.historyDeploys = res.data.historyDeploys;
-          console.log("=========getHistoryDeploy result========" + this.page);
+          this.totalPages = res.data.totalPages;
+          this.pageSize = res.data.pageSize;
+          this.historyDeploys = res.data.data;
+          
         
           // this.deployHistoys = res.data.deployHistoys;
         });
@@ -149,18 +187,22 @@
         //         });
         // });
       },
-      querySearchAsync: function(queryString, callback) {
-
-      },
-      handleSelect: function (item) {
-            console.log(item);
-            this.isShowList = true;
-      },
-
       handleClose(tag) {
         this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       },
-
+      querySearch: function(queryString, callback) {   
+        var results = queryString ? allHumanResource.filter(this.createFilter(queryString)) : allHumanResource;
+        console.log("=======query results: " + results);
+        callback(results);
+      },
+      createFilter(queryString) {
+        return (person) => {
+          return (person.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+        };
+      },
+      handleSelect(item) {
+        console.log("handle selected result value: " + item.value + "; loginId: " + item.loginId + "id: " + item.id);
+      },
       showInput() {
         this.inputVisible = true;
         this.$nextTick(_ => {
@@ -176,12 +218,25 @@
         this.inputVisible = false;
         this.inputValue = '';
       },
+      uploadSuccess(res, file) {
 
+      },
+      uploadError(res, file) {
+
+      },
+      onRemoveTxt(res, file) {
+
+      },
+      onBeforeUpload(res, file) {
+
+      },
+      
       onDeploy: function () {
-        this.$refs.deployForm.validate((valid) => {
+        this.$refs.versionInfoForm.validate((valid) => {
           if (valid) {
             this.$confirm('确认发布吗？', '提示', {}).then(() => {
-              let para = Object.assign({}, this.deployForm);
+              let para = Object.assign({}, this.versionInfoForm);
+              para.upgradeType ? para.upgradeType = "3": para.upgradeType = "2";
               deploy(para).then((res) => {
                 this.$message({
                   message: '发布成功',

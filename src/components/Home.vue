@@ -4,7 +4,7 @@
     <el-col :span="24" class="header">
       <a class="logo" href="/" style="font-size:21px font-weight: bold">
         <img src="../assets/seedland-32.png">
-      <span>应用发布平台</span>
+      <span>应用管理平台</span>
       </a>
       <el-col :span="3"  class="userinfo">
         <el-dropdown trigger="hover">
@@ -50,7 +50,7 @@
     },
     data() {
       return {
-        sysName: '应用发布平台',
+        sysName: '应用管理平台',
         collapsed: false,
         userName: '',
         userAvatar: '',

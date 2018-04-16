@@ -9,11 +9,13 @@ import Mock from './mock/mock'
 Mock.bootstrap();
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import ElUpload from 'element-upload'
 
 
 Vue.use(ElementUI)
 Vue.use(MintUI)
 Vue.use(Vuex)
+Vue.component('el-upload', ElUpload)
 
 router.beforeEach((to, from, next) => {
   if (to.path == '/login') {

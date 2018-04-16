@@ -56,20 +56,22 @@ export default {
     });
 
     //获取info列表
-    mock.onGet('/historyDeploy').reply(config => {
+    mock.onGet('/list').reply(config => {
       let {page} = config.params;
       
       let mockHistoryDeploys = _HistoryDeploys.filter(historyDeploy => {
         
         return true;
       });
-      let total = mockHistoryDeploys.length;
-      mockHistoryDeploys = mockHistoryDeploys.filter((u, index) => index < 7 * page && index >= 7 * (page - 1));
-      console.log("========_HistoryDeploys===========page: " + page + "====total====" + total);
+      let totalPages = mockHistoryDeploys.length;
+      let pageSize = 7;
+      mockHistoryDeploys = mockHistoryDeploys.filter((u, index) => index < pageSize * page && index >= pageSize * (page - 1));
+      console.log("========_HistoryDeploys===========page: " + page + "====totalPages====" + totalPages);
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200,{
-            total: total,
+            totalPages: totalPages,
+            pageSize: pageSize,
             historyDeploys: mockHistoryDeploys
           }]);
         },1000);
@@ -93,12 +95,12 @@ export default {
         if (name && user.name.indexOf(name) == -1) return false;
         return true;
       });
-      let total = mockUsers.length;
+      let totalPages = mockUsers.length;
       mockUsers = mockUsers.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
-            total: total,
+            totalPages: totalPages,
             users: mockUsers
           }]);
         }, 1000);
