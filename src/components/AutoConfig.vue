@@ -1,5 +1,5 @@
 <template>
-    <div class="contenter">
+    <div class="container">
         <!-- <mu-appbar>
             <div class="title">
                 首页配置
@@ -201,9 +201,10 @@ export default {
     display: none;
 }
 
-.contenter {
+.container {
   background-color: #fff;
   margin: 10px;
+  height: 900px;
   position: relative;
   z-index: 100;
   border: 1px solid grey;
@@ -233,7 +234,7 @@ export default {
 }
 
 .attributes {
-    .client-height;
+    height: 898px;
     background-color: @previewBG;
     position: relative;
     display: flex;
@@ -265,13 +266,14 @@ export default {
 }
 
 .preview {
-    .client-height;
+    height: 898px;
+
     box-shadow: 0 1px 6px rgba(0, 0, 0, .117647), 0 1px 4px rgba(0, 0, 0, .117647);
     z-index: 1;
 }
 
 .components {
-    .client-height;
+    height: 898px;
     background-color: @previewBG;
     overflow-y: scroll;
 }

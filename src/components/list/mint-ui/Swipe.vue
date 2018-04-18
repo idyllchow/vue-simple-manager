@@ -7,8 +7,7 @@
 </template>
 
 
-<style scoped lang="less">
-@import '~muse-ui/src/styles/colors.less';
+<!-- @import '~muse-ui/src/styles/colors.less';
 	.swipe{
 		height:40px;
 		div{
@@ -16,5 +15,13 @@
 			background-color: #26a2ff;
 			color:white;
 		}
-	}
+	} -->
+<style scoped lang="less">
+
+.swipe {
+	height: 200px;
+	color: #fff;
+	text-align: center;
+}
+
 </style>

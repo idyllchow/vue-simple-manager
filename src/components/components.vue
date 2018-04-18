@@ -41,6 +41,9 @@
                 <li draggable="true" @dragstart="dragStart" data-name="Badge">
                     <mt-badge type="primary">Badge</mt-badge>
                 </li>
+                <li draggable="true" @dragstart="dragStart" data-name="Tabbar">
+                    <mt-tabbar>Tabbar</mt-tabbar>
+                </li>
             </ul>
         </div>
         <div v-if="activeUI === 'Element-UI'">

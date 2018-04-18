@@ -9,6 +9,7 @@ import Cell from './Cell'
 import Switch from './Switch'
 import Field from './Field'
 import Badge from './Badge'
+import Tabbar from './Tabbar'
 
 var obj = {
     Header,
@@ -20,7 +21,8 @@ var obj = {
     Cell,
     Switch,
     Field,
-    Badge
+    Badge,
+    Tabbar
 }
 
 export default obj

@@ -28,7 +28,6 @@ section {
 }
 
 .preview-mobile {
-    background();
     width: 100%;
     height: 100vh;
     background-color: @grey50;

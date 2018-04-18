@@ -6,10 +6,10 @@
                 <mu-sub-header style="display:inline;">{{showType}}</mu-sub-header>
                 <mu-icon-button style="float:right;" icon="fullscreen" tooltip="全屏" @click="fullScreen" />
                 <mu-icon-button style="float:right;" icon="delete" tooltip="清空" @click="empty" />
-                <mu-icon-menu style="float:right;" icon="stay_current_portrait" tooltip="视图" :targetOrigin="{vertical: 'bottom',horizontal: 'left'}">
+                <!-- <mu-icon-menu style="float:right;" icon="stay_current_portrait" tooltip="视图" :targetOrigin="{vertical: 'bottom',horizontal: 'left'}">
                     <mu-menu-item title="调整比例" @click="setWidth" />
                     <mu-menu-item :title="previewMode==='pc'?'手机模式':'PC模式'" @click="previewMode=previewMode==='pc'?'mobile':'pc'" />
-                </mu-icon-menu>
+                </mu-icon-menu> -->
                 <mu-icon-button style="float:right;" icon=":iconfont icon-css" tooltip="编辑样式" @click="editStyle" />
                 <mu-icon-button style="float:right;" icon="code" tooltip="查看代码" @click="showCode" />
                 <mu-icon-button v-if="$store.state.backupComponents.length" style="float:right;" icon="undo" tooltip="撤销" @click="undo" />
@@ -21,6 +21,7 @@
         </mu-paper>
         <!-- 预览视图 -->
         <div ref="preview" v-show="previewMode==='pc'" class="preview-area" @click="clickPreview" @contextmenu="rightClick" @keyup.delete="del">
+            
             <div v-if="!item.parentId" :id="item.info.id" v-for="(item,index) in components"></div>
         </div>
         <iframe src="./#/preview/mobile" class="preview-mobile" v-if="previewMode==='mobile'"></iframe>
@@ -646,11 +647,28 @@ export default {
 }
 
 .preview-area {
-    overflow: auto;
-    position: relative;
-    height: inherit;
-    z-index: 0;
-    padding-bottom: 100px;
+    
+    
+    background-image: url(../assets/phone.1804041120.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100%;
+    padding: 100px 16px;
+    box-sizing: border-box;
+    width: 365px;
+
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: none;
+}
+
+.mobile-content {
+    width: 100%;
+    height: 580px;
+    background-color: #fff;
 }
 
 .preview-tip {
@@ -712,4 +730,23 @@ export default {
     width: 100%;
 }
 </style>
+
+    <!-- overflow: auto;
+    position: relative;
+    height: inherit;
+    z-index: 0;
+    padding-bottom: 100px; -->
+
+    <!-- margin: 20px 20px 0;
+    background-image: url(../static/assets/phone.1804041120.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100%;
+    padding: 100px 16px;
+    box-sizing: border-box;
+    width: 365px; -->
+
+<!-- width: 100%;
+    height: 580px;
+    background-color: #fff; -->
 
