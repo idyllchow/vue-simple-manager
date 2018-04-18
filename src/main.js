@@ -11,6 +11,18 @@ import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import ElUpload from 'element-upload'
 
+import MuseUI from 'muse-ui'
+import 'muse-ui/dist/muse-ui.css'
+//为代码文本提供高亮、缩进
+import VueHighlightJS from 'vue-highlightjs'
+Vue.use(VueHighlightJS)
+
+import pretty from 'pretty'
+Vue.prototype.$prettyDom = pretty
+
+import './assets/css/global.css'
+// import '@/assets/css/theme-dark.css'
+Vue.use(MuseUI)
 
 Vue.use(ElementUI)
 Vue.use(MintUI)
@@ -32,34 +44,26 @@ router.beforeEach((to, from, next) => {
 
 })
 
+
 // const app = new Vue({
-//   el: '#app',
+//   // el: '#app',
+//   router,
+//   store,
 //   data: {
 //     currentRoute: window.location.pathname
 //   },
-//   computed: {
-//     ViewComponent () {
-//       const matchingView = router[this.currentRoute]
-//       return matchingView
-//         ? require('./pages/' + matchingView + '.vue')
-//         : require('./pages/404.vue')
-//     }
-//   },
-//   render (h) {
-//     return h(this.ViewComponent)
-//   }
-// })
+//   components: {Main},
+//   render: h => h(Main)
+// }).$mount('#app')
 
-const app = new Vue({
-  // el: '#app',
-  router,
-  store,
-  data: {
-    currentRoute: window.location.pathname
-  },
-  render: h => h(Main)
-}).$mount('#app')
+window._Vue = new Vue({
+    el: '#app',
+    store,
+    router,
+    data: {
+      currentRoute: window.location.pathname
+    },
+    template: '<Main/>',
+    components: { Main }
+})
 
-// window.addEventListener('popstate', () => {
-//   app.currentRoute = window.location.pathname
-// })
