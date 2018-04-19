@@ -20,11 +20,13 @@
             </mu-content-block>
         </mu-paper>
         <!-- 预览视图 -->
-        <div ref="preview" v-show="previewMode==='pc'" class="preview-area" @click="clickPreview" @contextmenu="rightClick" @keyup.delete="del">
+        <div class="preview-area"  >
+        <div ref="preview" v-show="previewMode==='pc'" class="mobile-content" @click="clickPreview" @contextmenu="rightClick" @keyup.delete="del">
             
             <div v-if="!item.parentId" :id="item.info.id" v-for="(item,index) in components"></div>
         </div>
-        <iframe src="./#/preview/mobile" class="preview-mobile" v-if="previewMode==='mobile'"></iframe>
+        </div>
+        
         <mu-content-block class="preview-tip" v-if="components.length===0">
             拖拽组件进来
         </mu-content-block>
@@ -187,7 +189,9 @@ export default {
             if (e.target.className.indexOf('sound-code') !== -1 || e.target.className.indexOf('hljs') !== -1)
                 return
 
-            let isNest = e.target.className.indexOf('preview') === -1 && e.target.id !== 'placeholder'
+            // let isNest = e.target.className.indexOf('preview') === -1 && e.target.id !== 'placeholder'
+            //此版本不允许嵌套
+            let isNest = false
             let info = JSON.parse(e.dataTransfer.getData('info'))
             info.id = guid()
             let name = info.name //拖动的组件名字
@@ -637,6 +641,21 @@ export default {
     }
 }
 </script>
+<!-- background-image: url(../assets/phone.1804041120.png); -->
+<!-- background-image: url(../assets/mobile0.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100%;
+    padding: 90px 16px;
+    padding-bottom: 200px;
+    box-sizing: border-box;
+    width: 365px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: none;
+    overflow: auto; -->
 <style lang="less" scoped>
 @import '~muse-ui/src/styles/colors.less';
 .preview {
@@ -646,29 +665,24 @@ export default {
     background: white;
 }
 
-.preview-area {
-    
-    
-    background-image: url(../assets/phone.1804041120.png);
+.preview-area {   
+    background-image: url(../assets/mobile0.png);
     background-repeat: no-repeat;
     background-size: 100%;
     height: 100%;
-    padding: 100px 16px;
+    padding: 90px 16px;
     box-sizing: border-box;
     width: 365px;
-
-
-    position: absolute;
-    left: 0;
-    right: 0;
     margin: auto;
-    border: none;
+    margin-top: 20px;
 }
 
 .mobile-content {
     width: 100%;
     height: 580px;
     background-color: #fff;
+
+    overflow: auto;
 }
 
 .preview-tip {
@@ -715,21 +729,26 @@ export default {
     overflow: auto;
 }
 
-.preview-mobile {
-    position: absolute;
-    width: 375px;
-    height: 100%;
-    left: 0;
-    right: 0;
-    margin: auto;
-    border: none;
-    box-shadow: 0 14px 45px rgba(0, 0, 0, .247059), 0 10px 18px rgba(0, 0, 0, .219608);
-}
-
 .contextmenu>div {
     width: 100%;
 }
 </style>
+
+<!-- .preview-area {   
+    background-image: url(../assets/phone.1804041120.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100%;
+    padding: 90px 16px;
+    padding-bottom: 200px;
+    box-sizing: border-box;
+    width: 365px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: none;
+} -->
 
     <!-- overflow: auto;
     position: relative;

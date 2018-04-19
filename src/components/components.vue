@@ -17,19 +17,28 @@
                 <li draggable="true" @dragstart="dragStart" data-name="Header">
                     <mt-header fixed title="Header"></mt-header>
                 </li>
-                <li draggable="true" @dragstart="dragStart" data-name="Button">
-                    <mt-button type="default">Button</mt-button>
+                <li draggable="true" @dragstart="dragStart" data-name="Navbar">
+                    <mt-navbar>
+                        <mt-tab-item id="1">option A</mt-tab-item>
+                        <mt-tab-item id="2">option B</mt-tab-item>
+                        <mt-tab-item id="3">option C</mt-tab-item>
+                    </mt-navbar>
                 </li>
+                
                 <li draggable="true" @dragstart="dragStart" data-name="Swipe">
                     <mint-swipe>Banner</mint-swipe>
                 </li>
-                <li draggable="true" @dragstart="dragStart" data-name="Range">
+                <li draggable="true" @dragstart="dragStart" data-name="Tabbar">
+                    <mt-tabbar>Tabbar</mt-tabbar>
+                </li>
+                <!-- <li draggable="true" @dragstart="dragStart" data-name="Button">
+                    <mt-button type="default">Button</mt-button>
+                </li> -->
+
+                <!-- <li draggable="true" @dragstart="dragStart" data-name="Range">
                     <mt-range />
-                </li>
-                <li draggable="true" @dragstart="dragStart" data-name="Progress">
-                    <mint-progress />
-                </li>
-                <li draggable="true" @dragstart="dragStart" data-name="Cell">
+                </li> -->
+                <!-- <li draggable="true" @dragstart="dragStart" data-name="Cell">
                     <mt-cell title="Cell" value="..."></mt-cell>
                 </li>
                 <li draggable="true" @dragstart="dragStart" data-name="Switch">
@@ -37,13 +46,11 @@
                 </li>
                 <li draggable="true" @dragstart="dragStart" data-name="Field">
                     <mt-field label="Field" placeholder="placeholder"></mt-field>
-                </li>
-                <li draggable="true" @dragstart="dragStart" data-name="Badge">
+                </li> -->
+                <!-- <li draggable="true" @dragstart="dragStart" data-name="Badge">
                     <mt-badge type="primary">Badge</mt-badge>
-                </li>
-                <li draggable="true" @dragstart="dragStart" data-name="Tabbar">
-                    <mt-tabbar>Tabbar</mt-tabbar>
-                </li>
+                </li> -->
+                
             </ul>
         </div>
         <div v-if="activeUI === 'Element-UI'">

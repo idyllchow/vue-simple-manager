@@ -1,8 +1,8 @@
 import mintSwipe from './Swipe.vue'
-import mintProgress from './Progress.vue'
-import Tabbar from './Tabbar.vue'
+import navbar from './Navbar.vue'
+import tabbar from './Tabbar.vue'
 export default{
 	mintSwipe,
-	mintProgress,
-	Tabbar
+	navbar,
+	tabbar
 }

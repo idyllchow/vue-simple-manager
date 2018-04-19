@@ -28,7 +28,10 @@
       <el-tab-pane label="应用发布" name="second">
         <Deploy/>
       </el-tab-pane>
-      <el-tab-pane label="关于" name="third">   
+      <el-tab-pane label="统计数据" name="third">
+        <Stats/>
+      </el-tab-pane>
+      <el-tab-pane label="关于" name="fouth">   
         <About/>   
       </el-tab-pane>
     </el-tabs>
@@ -40,12 +43,14 @@
 <script>
   import AutoConfig from './AutoConfig.vue'
   import Deploy from './Deploy.vue'
+  import Stats from './Stats.vue'
   import About from './About.vue'
 
   export default {
     components: {
       AutoConfig,
       Deploy,
+      Stats,
       About
     },
     data() {

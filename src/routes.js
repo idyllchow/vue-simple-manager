@@ -9,6 +9,7 @@ import Home from './components/Home.vue'
 import AutoConfig from './components/AutoConfig.vue'
 import NotFound from './components/404.vue'
 import Deploy from './components/Deploy.vue'
+import Stats from './components/Stats.vue'
 import About from './components/About.vue'
 
 import Vue from 'vue'

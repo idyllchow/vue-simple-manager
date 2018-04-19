@@ -204,7 +204,7 @@ export default {
 .container {
   background-color: #fff;
   margin: 10px;
-  height: 900px;
+  height: inherit;
   position: relative;
   z-index: 100;
   border: 1px solid grey;

@@ -5,7 +5,7 @@ var handle = function(_attr, _slots) {
     let attributes = {
             src: {
                 type: 'text',
-                value: './static/img_banner.png'
+                value: './src/assets/img_head.png'
             },
             alt:{
                 type:'text',
