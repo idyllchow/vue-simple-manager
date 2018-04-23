@@ -4,25 +4,22 @@ var handle = function(_attr, _slots) {
     let attributes = {
             label: {
                 type: 'text',
-                value: '按钮'
+                value: 'app'
             },
             plain:{
                 type:'boolean',
                 value:''
             },
-            type:{
-                type:'selection',
-                items:['default','primary','danger'],
-                value:'default'
-            },
-            size:{
-                type:'selection',
-                items:['small','normal','large'],
+            url:{
+                type:'text',
                 value:''
             },
-            icon:{
-                type:'selection',
-                items:['more','back'],
+            unreadMessage:{
+                type:'text',
+                value:''
+            },
+            group:{
+                type: 'text',
                 value:''
             }
         },
@@ -56,10 +53,12 @@ var handle = function(_attr, _slots) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes)
-    let template = `<mt-button 
+    let template = `<mu-icon value="home" :size="72" style="margin-left: 10px"
                         ${stringAttr}>${subContent}
                             ${attributes.label.value}
-                        </mt-button>`
+                        </mu-icon>
+
+                        `
         //删除自定义非ui属性
     template = template.replace(`:label="${attributes.label.value}"`, '')
     return { template, attributes, slots }

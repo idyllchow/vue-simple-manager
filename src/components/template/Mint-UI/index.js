@@ -1,6 +1,6 @@
 // Mint-UI template
 import Header from './Header'
-import Button from './Button'
+import SingleApp from './SingleApp'
 import SwipeItem from './Swipe item'
 import Swipe from './Swipe'
 import Range from './Range'
@@ -11,10 +11,12 @@ import Field from './Field'
 import Badge from './Badge'
 import TabItem from './TabItem'
 import Tabbar from './Tabbar'
+import GridItem from './GridItem'
+import Grid from './Grid'
 
 var obj = {
     Header,
-    Button,
+    SingleApp,
     ['Swipe item']: SwipeItem,
     Swipe,
     Range,
@@ -24,7 +26,9 @@ var obj = {
     Field,
     Badge,
     ['TabItem']: TabItem,
-    Tabbar
+    Tabbar,
+    ['GridItem']: GridItem,
+    Grid
 }
 
 export default obj

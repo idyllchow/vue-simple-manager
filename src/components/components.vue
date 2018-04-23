@@ -24,6 +24,11 @@
                         <mt-tab-item id="3">option C</mt-tab-item>
                     </mt-navbar>
                 </li>
+                <li draggable="true" @dragstart="dragStart" data-name="SingleApp">
+                    <mu-icon value="home" :size="48" type="default">
+                    App</mu-icon><br>
+                    <span >&nbspApp</span>
+                </li>
                 
                 <li draggable="true" @dragstart="dragStart" data-name="Swipe">
                     <mint-swipe>Banner</mint-swipe>
@@ -31,9 +36,9 @@
                 <li draggable="true" @dragstart="dragStart" data-name="Tabbar">
                     <mt-tabbar>Tabbar</mt-tabbar>
                 </li>
-                <!-- <li draggable="true" @dragstart="dragStart" data-name="Button">
-                    <mt-button type="default">Button</mt-button>
-                </li> -->
+                <li draggable="true" @dragstart="dragStart" data-name="Grid">
+                    <mu-grid-list>Grid</mu-grid-list>
+                </li>
 
                 <!-- <li draggable="true" @dragstart="dragStart" data-name="Range">
                     <mt-range />
@@ -140,6 +145,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.divcss5{text-align:center} 
 .components-list {
     list-style: none;
     margin: 0;

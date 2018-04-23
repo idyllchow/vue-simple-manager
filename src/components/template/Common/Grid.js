@@ -5,11 +5,7 @@ var handle = function(_attr, _slots) {
     let attributes = {
             src: {
                 type: 'text',
-                value: './src/assets/mobile0.png'
-            },
-            alt:{
-                type:'text',
-                value:''
+                value: './src/assets/img_grid1.png'
             },
             width:{
                 type:'text',
@@ -17,15 +13,14 @@ var handle = function(_attr, _slots) {
             },
             height:{
                 type:'text',
-                value:'100px'
+                value:''
             }
-        },
+        },  
         slots = {}
 
     //覆盖默认属性
     Object.assign(slots, _slots)
     Object.assign(attributes, _attr)
-
     //根据组件不同需要做的不同操作
 
 
@@ -46,7 +41,7 @@ var handle = function(_attr, _slots) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes)
-    let template = `<img ${stringAttr} />`
+    let template = `<img ${stringAttr} />` + `<span slot="title">title</span>`
 
     return { template, attributes, slots }
 }

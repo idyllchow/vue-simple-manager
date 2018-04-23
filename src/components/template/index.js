@@ -5,6 +5,7 @@ import MintUI from './Mint-UI'
 
 var getTemplate = function(info, _attr = {}, _slots = {}) {
     let component
+    console.log("==========component=======" + JSON.stringify(info));
     switch (info.ui) {
         // case 'Muse-UI':
         //     component = MuseUI[info.name](_attr, _slots, info)
@@ -21,6 +22,7 @@ var getTemplate = function(info, _attr = {}, _slots = {}) {
     }
 
     //为了不让二次获取模板时丢失slot信息
+    console.log("==========component=======" + JSON.stringify(component));
     component.slot = component.attributes.slot.value
 
     //为了不让slot出现在属性面板
