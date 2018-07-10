@@ -20,6 +20,7 @@ Vue.use(VueHighlightJS)
 import pretty from 'pretty'
 Vue.prototype.$prettyDom = pretty
 
+
 import './assets/css/global.css'
 // import '@/assets/css/theme-dark.css'
 Vue.use(MuseUI)

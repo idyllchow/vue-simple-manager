@@ -35,7 +35,7 @@ var getTemplate = function(info, _attr = {}, _slots = {}) {
     }
 
     //添加组件标识 (info.id是唯一标识)
-    component.template = component.template.replace(' ', ' data-component-active tabIndex="0" ')
+    // component.template = component.template.replace(' ', ' data-component-active tabIndex="0" ')
 
     component.info = info
 
@@ -82,4 +82,24 @@ var getStringTypeAttr = function(attributes) {
     })
     return stringAttr
 }
-export { getSlotContent, getTemplate, getStringTypeAttr }
+var handleShopAvatarScucess = function(res, file) {
+    if (res.status == 1) {
+        this.formData.image_path = res.image_path;
+    }else{
+        this.$message.error('上传图片失败！');
+    }            
+}
+var beforeAvatarUpload = function(file) {
+                const isRightType = (file.type === 'image/jpeg') || (file.type === 'image/png');
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isRightType) {
+                    this.$message.error('上传图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传图片大小不能超过 2MB!');
+                }
+                return isRightType && isLt2M;
+            }    
+
+export { getSlotContent, getTemplate, getStringTypeAttr, handleShopAvatarScucess,beforeAvatarUpload }

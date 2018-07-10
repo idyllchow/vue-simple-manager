@@ -1,5 +1,5 @@
 <template>
-    <mu-content-block>
+    <mu-content-block class="slid">
         <subAttribute v-if="current" :attributes="current.attributes" style="margin-left:-10px;" @update="updateAttribute" />
     </mu-content-block>
 </template>
@@ -86,3 +86,14 @@ export default {
     }
 }
 </script>
+
+<style lang="less" scoped>
+@import '~muse-ui/src/styles/colors.less';
+.slid {
+    height: inherit;
+    position: relative;
+    overflow: hidden;
+    background: white;
+}
+
+</style>

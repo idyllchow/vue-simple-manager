@@ -1,4 +1,8 @@
-import { getTemplate, getSlotContent , getStringTypeAttr } from '../'
+import {
+    getTemplate,
+    getSlotContent,
+    getStringTypeAttr
+} from '../'
 var handle = function(_attr, _slots) {
     //定义默认属性
     let attributes = {
@@ -6,9 +10,9 @@ var handle = function(_attr, _slots) {
                 type: 'text',
                 value: 'title'
             },
-            fixed:{
-                type:'boolean',
-                value:false
+            fixed: {
+                type: 'boolean',
+                value: false
             }
         },
         slots = {
@@ -27,7 +31,7 @@ var handle = function(_attr, _slots) {
     var subContent = getSlotContent(slots)
 
     //设置当前组件的slot
-    if (attributes.slot && attributes.slot!=='default') {
+    if (attributes.slot && attributes.slot !== 'default') {
         attributes.slot = {
             type: 'text',
             value: attributes.slot
@@ -46,6 +50,10 @@ var handle = function(_attr, _slots) {
                         ${subContent}
                     </mt-header>`
 
-    return { template, attributes, slots }
+    return {
+        template,
+        attributes,
+        slots
+    }
 }
 export default handle

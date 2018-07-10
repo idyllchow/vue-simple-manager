@@ -1,14 +1,14 @@
 <template>
   <div>
   <el-row class="container">
-    <el-col :span="24" class="header">
+    <el-col :span="24" class="header" style="background-color:#1261A3">
       <a class="logo" href="/" style="font-size:21px font-weight: bold">
-        <img src="../assets/seedland-32.png">
-      <span>应用管理平台</span>
+        <!-- <img src="../assets/seedland_32.png"> -->
+      <span style="color:white; margin-left:20px; font-weight:bold;">应用管理后台</span>
       </a>
       <el-col :span="3"  class="userinfo">
         <el-dropdown trigger="hover">
-          <span class="el-dropdown-link userinfo-inner"><img :src="this.userAvatar"/> {{userName}} </span>
+          <span class="el-dropdown-link userinfo-inner" style="color:white"><img :src="this.userAvatar"/> {{userName}} </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
@@ -31,9 +31,9 @@
       <el-tab-pane label="统计数据" name="third">
         <Stats/>
       </el-tab-pane>
-      <el-tab-pane label="关于" name="fouth">   
+      <!-- <el-tab-pane label="关于" name="fouth">   
         <About/>   
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
     </div>
 
@@ -55,7 +55,7 @@
     },
     data() {
       return {
-        sysName: '应用管理平台',
+        sysName: '应用管理后台',
         collapsed: false,
         userName: '',
         userAvatar: '',
@@ -82,7 +82,6 @@
       var user = sessionStorage.getItem('user');
       console.log(user);
       if (user) {
-        console.log("========user info======" + user)
         user = JSON.parse(user);
         this.userName = user.name || '';
         this.userAvatar = user.avatar || '';

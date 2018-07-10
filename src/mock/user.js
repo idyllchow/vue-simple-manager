@@ -5,7 +5,7 @@ const LoginUsers = [
     username: 'admin',
     password: '123456',
     avatar: 'https://avatars1.githubusercontent.com/u/10448994?s=400&amp;u=4b3ece10fcd05cb174432c8ce92b1c5f57b0b995&amp;v=4',
-    name: '管理员的哥哥'
+    name: '管理员'
   }
 ];
 

@@ -1,31 +1,19 @@
-import { getTemplate, getSlotContent, getStringTypeAttr } from '../'
+import { getTemplate, getSlotContent , getStringTypeAttr } from '../'
 var handle = function(_attr, _slots) {
     //定义默认属性
     let attributes = {
-            label: {
+            title: {
                 type: 'text',
-                value: 'app'
+                value: 'title'
             },
-            plain:{
+            fixed:{
                 type:'boolean',
-                value:''
-            },
-            url:{
-                type:'text',
-                value:''
-            },
-            unreadMessage:{
-                type:'text',
-                value:''
-            },
-            group:{
-                type: 'text',
-                value:''
+                value:false
             }
         },
         slots = {
-            default:[],
-            icon:[]
+            left: [],
+            right: []
         }
 
     //覆盖默认属性
@@ -53,14 +41,12 @@ var handle = function(_attr, _slots) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes)
-    let template = `<mu-icon value="home" :size="72" style="margin-left: 10px"
-                        ${stringAttr}>${subContent}
-                            ${attributes.label.value}
-                        </mu-icon>
+    let template = `<p style="padding-left:20px; font-size:20px"
+                        >
+                        ${attributes.title.value}
+                        ${subContent}
+                    </p>`
 
-                        `
-        //删除自定义非ui属性
-    template = template.replace(`:label="${attributes.label.value}"`, '')
     return { template, attributes, slots }
 }
 export default handle

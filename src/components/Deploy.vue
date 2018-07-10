@@ -21,6 +21,9 @@
         <el-form-item label="版本号" prop="version">
           <el-input v-model="versionInfoForm.version" name="version" placeholder="请输入发布版本号"></el-input>
         </el-form-item>
+        <el-form-item label="下载链接" >
+          <el-input v-model="versionInfoForm.url" name="url" placeholder="请输入下载链接"></el-input>
+        </el-form-item>
         <el-form-item label="强制更新">
           <el-switch on-text="" off-text="" v-model="versionInfoForm.upgradeType"></el-switch>
         </el-form-item>
@@ -33,7 +36,7 @@
             @close="handleClose(tag)">
             {{tag}}
           </el-tag>
-          <el-autocomplete
+          <el-autocomplete 
             class="input-new-tag"
             :fetch-suggestions="querySearch"
             v-if="inputVisible"
@@ -44,9 +47,9 @@
             size="small"
             @select="handleSelect"
             @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-            >
+            >        
           </el-autocomplete>
+          <!-- @blur="handleInputConfirm" -->
 
           <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 灰度用户</el-button>
         </el-form-item>
@@ -80,16 +83,17 @@
       <el-table :data="historyDeploys" highlight-current-row v-loading="loading" style="width: 100%;">
           <el-table-column type="index" width="80">
           </el-table-column>
-          <el-table-column prop="appName" label="应用名称" width="120" sortable>
+          <el-table-column prop="appName" label="应用名称" :formatter="formatAppName" width="120" sortable>
           </el-table-column>
-          <el-table-column prop="osType" label="系统平台" width="120" sortable>
+          <el-table-column prop="osType" label="系统平台" width="100" sortable>
           </el-table-column>
-          <el-table-column prop="version" label="版本号" width="120"></el-table-column>
-          <el-table-column prop="upgradeType" label="更新类型"  :formatter="formatUpgradeType" width="120"> <!-- :formatter="formatPlatform" -->
+          <el-table-column prop="version" label="版本号" width="100"></el-table-column>
+          <!-- <el-table-column prop="url" label="下载链接" width="80"></el-table-column> -->
+          <el-table-column prop="upgradeType" label="更新类型"  :formatter="formatUpgradeType" width="120">
           </el-table-column>
-          <el-table-column prop="createTime" label="添加时间" width="180" sortable>
+          <el-table-column prop="createTime" label="添加时间" width="160" sortable>
           </el-table-column>
-          <el-table-column prop="changeLog" label="更新日志" min-width="100" >
+          <el-table-column prop="changeLog" label="更新日志" :formatter="formatChangeLog" min-width="100" >
           </el-table-column>
       </el-table>
     </div>
@@ -134,6 +138,7 @@
             appName: '',
             osType: '',
             version: '',
+            url: '',
             upgradeType: '3',
             grayscale:'',
             changeLog:''
@@ -146,9 +151,15 @@
       }
     },
     methods: {
+      formatAppName: function(row, column) {
+        return row.appName == 'sloa' ? '实地通' : '应用2';
+      },
       //更新类型转换
       formatUpgradeType: function(row, column) {
         return row.upgradeType == 3 ? '强制更新' : '非强制更新';
+      },
+      formatChangeLog: function(row, column) {
+        return decodeURI(row.changeLog);
       },
       handleCurrentChange(val) {
         this.page = val;
@@ -175,7 +186,7 @@
           this.totalPages = res.data.totalPages;
           this.pageSize = res.data.pageSize;
           this.historyDeploys = res.data.data;
-          
+          console.log("====history=====" + this.historyDeploys);
         
           // this.deployHistoys = res.data.deployHistoys;
         });
@@ -192,7 +203,6 @@
       },
       querySearch: function(queryString, callback) {   
         var results = queryString ? allHumanResource.filter(this.createFilter(queryString)) : allHumanResource;
-        console.log("=======query results: " + results);
         callback(results);
       },
       createFilter(queryString) {
@@ -201,7 +211,8 @@
         };
       },
       handleSelect(item) {
-        console.log("handle selected result value: " + item.value + "; loginId: " + item.loginId + "id: " + item.id);
+        this.versionInfoForm.grayscale = this.versionInfoForm.grayscale.concat(item.loginId + ",");
+        console.log("handle selected result value: " + item.value + "; loginId: " + item.loginId + "=======versionInfoForm.grayscale: " + this.versionInfoForm.grayscale);
       },
       showInput() {
         this.inputVisible = true;
@@ -237,11 +248,14 @@
             this.$confirm('确认发布吗？', '提示', {}).then(() => {
               let para = Object.assign({}, this.versionInfoForm);
               para.upgradeType ? para.upgradeType = "3": para.upgradeType = "2";
+              console.log("==========para=========" + JSON.stringify(para));
               deploy(para).then((res) => {
                 this.$message({
                   message: '发布成功',
                   type: 'success'
                 });
+                this.getHistory();
+                // location.reload();
               });
             });
           }

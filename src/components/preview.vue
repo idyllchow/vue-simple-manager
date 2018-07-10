@@ -1,17 +1,15 @@
 <template>
+    <div>
     <section class="preview" @dragover="dragOver" @drop="drop">
         <!-- CODE视图 -->
         <mu-paper class="preview-head">
             <div class="bar">
-                <mu-sub-header style="display:inline;">{{showType}}</mu-sub-header>
-                <mu-icon-button style="float:right;" icon="done" tooltip="发布配置" @click="submitConfig" />
+                <!-- <mu-sub-header style="display:inline;">{{showType}}</mu-sub-header> -->
+                <div id="edit_done" >
+                <img style="float:right; margin-top:7px; width=10px; height=10px" src="../assets/img_done.png" tooltip="发布配置" v-on:click="submitConfig"> </img> </div>
+                <!-- <mu-icon-button style="float:right;" icon="../assets/img_done.png" tooltip="发布配置" @click="submitConfig" /> -->
                 <mu-icon-button style="float:right;" icon="fullscreen" tooltip="全屏" @click="fullScreen" />
                 <mu-icon-button style="float:right;" icon="delete" tooltip="清空" @click="empty" />
-                <!-- <mu-icon-menu style="float:right;" icon="stay_current_portrait" tooltip="视图" :targetOrigin="{vertical: 'bottom',horizontal: 'left'}">
-                    <mu-menu-item title="调整比例" @click="setWidth" />
-                    <mu-menu-item :title="previewMode==='pc'?'手机模式':'PC模式'" @click="previewMode=previewMode==='pc'?'mobile':'pc'" />
-                </mu-icon-menu> -->
-                <!-- <mu-icon-button style="float:right;" icon=":iconfont icon-css" tooltip="编辑样式" @click="editStyle" /> -->
                 <mu-icon-button style="float:right;" icon="code" tooltip="查看代码" @click="showCode" />
                 <mu-icon-button v-if="$store.state.backupComponents.length" style="float:right;" icon="undo" tooltip="撤销" @click="undo" />
             </div>
@@ -52,6 +50,7 @@
             </mu-menu>
         </mu-popover>
     </section>
+    </div>
 </template>
 <script>
 import mount from './mount'
@@ -66,6 +65,29 @@ import {
 import mergeDeep from '../utils/mergeDeep'
 //取随机id
 import guid from '../utils/guid'
+let onSuccess = function(res, file) {
+        this.imageUrl = res.url
+        this.$message.success('图片上传成功，地址为' + this.imageUrl)
+    }
+    let beforeUpload = function(file) {
+        const isRightType = (file.type === 'image/jpeg') || (file.type === 'image/png');
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isRightType) {
+            this.$message.error('上传图片只能是 JPG&PNG 格式!');
+        }
+        if (!isLt2M) {
+            this.$message.error('上传图片大小不能超过 2MB!');
+        }
+        return isRightType && isLt2M;
+    }
+    let onError = function(res, file) {
+        console.log('上传失败，请重试！' + this.uploadUrl)
+    }
+    let handlePictureCardPreview = function(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+    }
 export default {
     name: 'preview',
     data() {
@@ -84,7 +106,8 @@ export default {
                 position: null,
                 component: null
             },
-            previewMode: 'pc'
+            previewMode: 'pc',
+            imageUrl: ''
         }
     },
     mounted() {
@@ -151,7 +174,7 @@ export default {
         //读取云端数据
         let id = this.$route.params.id
         let query = new this.$lean.Query('Share')
-        console.log("======id:" + id + "========query======" + query)
+    
         if (id) {
             query.get(id).then(share => {
                 let store = share.get('store')
@@ -251,6 +274,7 @@ export default {
                     let topComponent = this.getParentComponent(this.current)
                     topComponent = getTemplate(topComponent.info, topComponent.attributes, topComponent.slots)
                     let topIndex = components.findIndex(c => c.info.id === topComponent.info.id)
+                
 
                     components[topIndex] = topComponent
                     components[index] = mergeDeep(components[index], component)
@@ -266,6 +290,7 @@ export default {
                     throw '没有这个组件的模板'
 
                 let components = JSON.parse(JSON.stringify(this.components))
+                
                 if (!this.insertPosition.position) {
 
                     components.push(component)
@@ -325,25 +350,25 @@ export default {
 
         },
         clickPreview(e) {
-            let target = e.target
-            e.preventDefault()
-            let componentHTML = this.getComponentNode(target)
-            if (componentHTML) {
-                //添加选中效果
-                let list = document.querySelectorAll('[data-component-active="true"]')
-                list.forEach(el => {
-                    el.setAttribute('data-component-active', '')
-                })
-                componentHTML.setAttribute('data-component-active', 'true')
+            // let target = e.target
+            // e.preventDefault()
+            // let componentHTML = this.getComponentNode(target)
+            // if (componentHTML) {
+            //     //添加选中效果
+            //     let list = document.querySelectorAll('[data-component-active="true"]')
+            //     list.forEach(el => {
+            //         el.setAttribute('data-component-active', '')
+            //     })
+            //     componentHTML.setAttribute('data-component-active', 'true')
 
-                //保存到vuex
-                let currentId = componentHTML.id
-                let component = this.components.find(component => component.info.id === currentId)
-                if (component)
-                    this.$store.commit('setState', {
-                        currentComponent: component
-                    })
-            }
+            //     //保存到vuex
+            //     let currentId = componentHTML.id
+            //     let component = this.components.find(component => component.info.id === currentId)
+            //     if (component)
+            //         this.$store.commit('setState', {
+            //             currentComponent: component
+            //         })
+            // }
         },
         mount() {
             //挂载及更新视图中组件的位置信息
@@ -403,8 +428,55 @@ export default {
             // 必需，勿删，会在ondrop中被重写
         },
         getSource(components) { //预览视图中所有组件的代码
+
+            let onSuccess = function(res, file) {
+                this.imageUrl = res.url
+                // imageUrl = res.url
+                this.$message.success('图片上传成功，地址：' + this.imageUrl)
+            }
+            let beforeUpload = function(file) {
+                const isRightType = (file.type === 'image/jpeg') || (file.type === 'image/png');
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isRightType) {
+                    this.$message.error('上传图片只能是 JPG&PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传图片大小不能超过 2MB!');
+                }
+                return isRightType && isLt2M;
+            }
+            let onError = function(res, file) {
+                console.log('上传失败，请重试！')
+            }
+            let handlePictureCardPreview = function(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            }
+
+
+
             let code = `<template><section>`
             components.filter(component => !component.parentId).forEach(component => {
+                console.log("get component.template: " + component.template);
+                if (component.template == "el-upload") {
+                    console.log("==========111111111111======" + this.imageUrl);
+                    component.template = component.template.replace(`el-upload`, `<el-upload
+                      class="avatar-uploader"
+                      action="http://192.168.64.175:8080/test/pic/upload"
+                      name="uploadFile"
+                      :show-file-list="false"
+                      :on-error="${onError}"
+                      :on-success="${onSuccess}"
+                      :on-preview="${handlePictureCardPreview}"
+                      :before-upload="${beforeUpload}"
+                      >
+                      
+                      <i class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>`)
+                }
+                
+                console.log("after get component.template: " + component.template);
                 code += component.template
             })
             code += `\n</section></template>`
@@ -608,6 +680,30 @@ export default {
                 copiedComponents: []
             })
             this.fresh()
+        },
+        onSuccess(res, file) {
+            this.$message.success('上传成功，地址为' + res.url)
+            this.imageUrl = res.url
+            // this.imageUrl = URL.createObjectURL(file.raw);
+          },
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        beforeUpload(file) {
+            const isJPG = file.type === 'image/jpeg'||'image/gif'||'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+              this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+              this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+        onError(response, file) {
+            this.$message.error('上传失败，请重试！' + this.uploadUrl)
         }
     },
     computed: {
@@ -623,6 +719,7 @@ export default {
         },
         components: { //组件树 ，预览视图中所有组件
             get() {
+                console.log("===================2=====" + JSON.stringify(this.$store.state.components))
                 return this.$store.state.components
             },
             set(components) {
@@ -633,6 +730,7 @@ export default {
         },
         current: { //当前选中组件
             get() {
+                console.log("===================3=====" + JSON.stringify(this.$store.state.currentComponent))
                 return this.$store.state.currentComponent
             }
         },
@@ -745,5 +843,29 @@ export default {
 .contextmenu>div {
     width: 100%;
 }
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 78px;
+    height: 78px;
+    line-height: 78px;
+    text-align: center;
+  }
+  .avatar {
+    width: 78px;
+    height: 78px;
+    display: block;
+  }
 </style>
 

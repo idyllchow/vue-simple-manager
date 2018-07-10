@@ -1,10 +1,13 @@
-import { getTemplate, getSlotContent, getStringTypeAttr } from '../'
+import {
+    getTemplate,
+    getSlotContent,
+    getStringTypeAttr
+} from '../'
 import guid from '../../../utils/guid'
 
 var handle = function(_attr, _slots, _info) {
     //定义默认属性
-    let attributes = {
-        },
+    let attributes = {},
         slots = {
             default: []
         }
@@ -18,12 +21,12 @@ var handle = function(_attr, _slots, _info) {
     let isFirstCreate = !components.find(c => c.info.id === _info.id)
     let addComponent = function(_attr, _slots) {
         let info = {
-            name: 'Img',
+            name: 'Banner',
             ui: 'Common',
             id: guid()
         }
         let component = getTemplate(info, _attr, _slots)
-            //尽量每次getTemplate后都重新获取components，避免里面修改了后造成不同步会报错
+        //尽量每次getTemplate后都重新获取components，避免里面修改了后造成不同步会报错
         components = JSON.parse(JSON.stringify(_Vue.$store.state.components))
         component.parentId = _info.id
         components.push(component)
@@ -31,15 +34,19 @@ var handle = function(_attr, _slots, _info) {
     }
     if (isFirstCreate) {
         let img = addComponent()
-        slots.default.push({ id: img.info.id })
-        _Vue.$store.commit('setState', { components })
+        slots.default.push({
+            id: img.info.id
+        })
+        _Vue.$store.commit('setState', {
+            components
+        })
     }
 
     //获取插槽模板内容
     var subContent = getSlotContent(slots)
 
     //设置当前组件的slot
-    if (attributes.slot && attributes.slot!=='default') {
+    if (attributes.slot && attributes.slot !== 'default') {
         attributes.slot = {
             type: 'text',
             value: attributes.slot
@@ -58,6 +65,10 @@ var handle = function(_attr, _slots, _info) {
                         ${subContent}
                     </mt-swipe-item>`
 
-    return { template, attributes, slots }
+    return {
+        template,
+        attributes,
+        slots
+    }
 }
 export default handle

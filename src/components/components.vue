@@ -1,4 +1,5 @@
 <template>
+    <div>
     <section>
         <mu-content-block style="display:flex;">
             <mu-select-field :value="activeUI" @change="handleTabChange" autoWidth>                
@@ -9,6 +10,7 @@
             </mu-select-field>
             <mu-sub-header style="white-space:nowrap;"> 组件选择</mu-sub-header>
         </mu-content-block>
+
         <!-- <div v-if="activeUI === 'Muse-UI'">
             
         </div> -->
@@ -24,10 +26,31 @@
                         <mt-tab-item id="3">option C</mt-tab-item>
                     </mt-navbar>
                 </li>
-                <li draggable="true" @dragstart="dragStart" data-name="SingleApp">
-                    <mu-icon value="home" :size="48" type="default">
-                    App</mu-icon><br>
-                    <span >&nbspApp</span>
+                <li draggable="true" @dragstart="dragStart" data-name="SingleModule">
+                    <!-- <mu-icon value="home" :size="48" type="default">
+                    Module</mu-icon> -->
+                
+                    
+                    <el-upload 
+                      class="avatar-uploader"
+                      :action="uploadUrl"
+                      name="uploadFile"
+                      type="drag"
+                      :show-file-list="false"
+                      :on-error="onError"
+                      :on-success="onSuccess"
+                      :on-preview="handlePictureCardPreview"
+                      :before-upload="beforeUpload">
+                      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                    <el-dialog :visible.sync="dialogVisible">
+                      <img width="100%" :src="imageUrl" alt>
+                    </el-dialog>
+                    <!-- <br>
+                    <span >&nbspModule</span> -->
+                    
+                    
                 </li>
                 
                 <li draggable="true" @dragstart="dragStart" data-name="Swipe">
@@ -38,6 +61,9 @@
                 </li>
                 <li draggable="true" @dragstart="dragStart" data-name="Grid">
                     <mu-grid-list>Grid</mu-grid-list>
+                </li>
+                <li draggable="true" @dragstart="dragStart" data-name="GroupTitle">
+                    <p>GroupTitle</p>
                 </li>
 
                 <!-- <li draggable="true" @dragstart="dragStart" data-name="Range">
@@ -87,15 +113,25 @@
             </ul>
         </div>
     </section>
+    </div>
 </template>
 <script>
 // import museUiList from './list/muse-ui'
 import mintUiList from './list/mint-ui'
+import {uploadUrl } from '../api/api'
 // import iViewUiList from './list/iview-ui'
+// http://192.168.64.175:8080/test/pic/upload
 export default {
     name: 'components',
     data() {
-        return {}
+        return {
+            // uploadUrl,
+            dialogVisible: false,
+            uploadUrl: 'http://192.168.64.175:8080/test/pic/upload',
+            imageUrl: '',
+            value1: null,
+            value2: null
+        };
     },
     mounted() {
 
@@ -123,7 +159,31 @@ export default {
                 ui: this.activeUI
             }
             e.dataTransfer.setData('info', JSON.stringify(info))
-        }
+        },
+        onSuccess(res, file) {
+            this.$message.success('上传成功，地址为' + res.url)
+            this.imageUrl = res.url
+            // this.imageUrl = URL.createObjectURL(file.raw);
+          },
+          handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+          },
+          beforeUpload(file) {
+            const isJPG = file.type === 'image/jpeg'||'image/gif'||'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+              this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+              this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+          },
+          onError(response, file) {
+            this.$message.error('上传失败，请重试！' + this.uploadUrl)
+          }
     },
     computed: {
         activeUI: {
@@ -176,5 +236,33 @@ export default {
     &:hover {
         transform: scale(1.1)translateX(10%);
     }
+}
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 78px;
+    height: 78px;
+    line-height: 78px;
+    text-align: center;
+  }
+  .avatar {
+    width: 78px;
+    height: 78px;
+    display: block;
+  }
+  .single-module {
+      width: 60px;
+      height: 60px;
 }
 </style>

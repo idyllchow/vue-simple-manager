@@ -1,34 +1,17 @@
 <template>
   <div class="stats">
     <!-- action="http://10.3.31.34:8080/pic/upload" -->
-    <el-upload 
+    <el-upload
   class="avatar-uploader"
   :action="uploadUrl"
   name="uploadFile"
   :show-file-list="false"
   :on-error="onError"
   :on-success="onSuccess"
-  :on-preview="handlePictureCardPreview"
   :before-upload="beforeUpload">
-  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+  <img v-if="uploadFile" :src="uploadFile" class="avatar">
   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 </el-upload>
-<el-dialog :visible.sync="dialogVisible">
-  <img width="100%" :src="imageUrl" alt>
-</el-dialog>
-
-
-<div class="block">
-  <span class="demonstration">Default</span>
-  <el-rate v-model="value1"></el-rate>
-</div>
-<div class="block">
-  <span class="demonstration">Color for different levels</span>
-  <el-rate
-    v-model="value2"
-    :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
-  </el-rate>
-</div>
   </div>
 </template>
 
@@ -63,21 +46,14 @@
     data() {
       return {      
         uploadUrl: 'http://192.168.64.175:8080/test/pic/upload',
-        dialogVisible: false,
         // uploadUrl: 'http://10.3.31.34:8080/pic/upload',
-        imageUrl: '',
-        value1: null,
-        value2: null
+        imageUrl: ''
       };
     },
     methods: {
       onSuccess(res, file) {
-        this.$message.success('上传成功！' + res.url)
+        alert('上传成功！' + res.url)
         this.imageUrl = URL.createObjectURL(file.raw);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
       },
       beforeUpload(file) {
         const isJPG = file.type === 'image/jpeg'||'image/gif'||'image/png';

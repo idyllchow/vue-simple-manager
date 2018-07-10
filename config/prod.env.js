@@ -1,4 +1,4 @@
 module.exports = {
   NODE_ENV: '"production"',
-  API_ROOT: '"http://10.3.63.85:8080"'
+  API_ROOT: '"http://schangepasswd.seedland.cc:8080/costing"'
 }
